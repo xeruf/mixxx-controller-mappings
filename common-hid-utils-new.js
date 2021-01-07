@@ -26,21 +26,20 @@ HIDPacket.prototype.clearControls = function() {
     this.send()
 }
 
-HIDController.prototype.getLightsPacket = function(packetName) {
-	return this.getOutputPacket(packetName ? packetName : 'lights')
+HIDController.prototype.getLightsPacket = function() {
+    return this.getOutputPacket('lights')
 }
 
-HIDController.prototype.sendLightsUpdate = function(packetName) {
-    this.getLightsPacket(packetName).send()
+HIDController.prototype.sendLightsUpdate = function() {
+    this.getLightsPacket().send()
 }
 
 HIDController.prototype.connectLight = function(group, name, setter) {
-    setter(engine.getValue(group, name), this.getLightsPacket(), group, name)
     var fun = function(value, group, name) {
         setter(value, this.getLightsPacket(), group, name)
         this.sendLightsUpdate()
     }.bind(this)
+    fun(engine.getValue(group, name), group, name)
     engine.makeConnection(group, name, fun)
-    this.sendLightsUpdate()
     return fun
 }
