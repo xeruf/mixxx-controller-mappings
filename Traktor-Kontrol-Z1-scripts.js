@@ -108,10 +108,6 @@ function KontrolZ1Controller() {
         this.controller.registerOutputPacket(packet)
     }
 
-    this.sendLightsUpdate = function() {
-        this.controller.getLightsPacket().send()
-    }
-
     this.brightness = 0x7f
     this.brightnessRange = 1.0 / 7
     this.refreshVolumeLights = function(value, group, key) {
@@ -121,7 +117,7 @@ function KontrolZ1Controller() {
             var br = Math.max(Math.min((value - i * this.brightnessRange) * 7, 1), 0) * this.brightness
             packet.getField('hid', 'ch' + channel + '_meter_segment' + (i + 1)).value = br
         }
-        this.sendLightsUpdate()
+        this.controller.sendLightsUpdate()
     }
 
     // endregion
