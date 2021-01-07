@@ -616,11 +616,11 @@ KontrolF1.control = function (control, field) {
 }
 
 KontrolF1.button = function (button, field) {
-    var controller = KontrolF1.controller
     if (button.callback !== undefined) {
         button.callback(button, field)
         return
     }
+    var controller = KontrolF1.controller
     if (button.toggle) {
         if (button.name === 'play')
             controller.togglePlay(button.group, field)
@@ -733,7 +733,6 @@ KontrolF1.registerCallbacks = function () {
         controller.setCallback('control', 'hid', 'grid_' + i, KontrolF1.grid)
     }
 
-
     for (i = 1; i < 4; i++) {
         KontrolF1.linkKnob('decks', 'knob_' + i, '[EffectRack1_EffectUnit' + channel + '_Effect' + i + ']', 'meta')
     }
@@ -745,7 +744,7 @@ KontrolF1.registerCallbacks = function () {
     KontrolF1.linkFader('decks', 'fader_4', '[Channel2]', 'rate')
 
     for (i = 1; i <= 16; i++) {
-        KontrolF1.linkGrid('decks', 'grid_' + i, '[Channel' + channel + ']', 'hotcue_' + i, false, KontrolF1.hotcue, [0, 0x30, 0x7f])
+        KontrolF1.linkGrid('decks', 'grid_' + i, '[Channel' + channel + ']', 'hotcue_' + i, false, KontrolF1.hotcue, [0, 64, 127])
     }
     // Map 3rd row for macro controls
     const macro_offset = 8
@@ -759,8 +758,7 @@ KontrolF1.registerCallbacks = function () {
     KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 3), '[Channel' + channel + ']', 'loop_halve', false, undefined, [0, 0x7f, 0])
     KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 4), '[Channel' + channel + ']', 'loop_double', false, undefined, [0, 0x7f, 0])
 
-    // Using 2 controllers side-by-side, the controller for Channel1 is on the left, so the innermost (right) controls
-    // should be mapped to Channel1 and vice versa
+    // Using 2 controllers side-by-side, the controller for Channel1 is on the left, so these controls are mirrored for convenience
     const mod = channel % 2
     KontrolF1.linkPlay('decks', 'play_' + (1 + mod * 3), '[Channel' + channel + ']', 'play', true)
     KontrolF1.linkPlay('decks', 'play_' + (2 + mod), '[Channel' + channel + ']', 'cue', undefined, function (button, field) {
@@ -780,14 +778,14 @@ KontrolF1.registerCallbacks = function () {
         }
         engine.setParameter(button.group, name, field.value === KontrolF1.controller.buttonStates.pressed)
     }, 'cue_default')
-    KontrolF1.linkPlay('decks', 'play_' + (3 - mod * 2), '[Channel' + channel + ']', 'beats_translate_earlier', undefined, KontrolF1.translateBeats, 'beats_translate_earlier', [0x20, 0x50])
-    KontrolF1.linkPlay('decks', 'play_' + (4 - mod * 2), '[Channel' + channel + ']', 'beats_translate_later', undefined, KontrolF1.translateBeats, 'beats_translate_later', [0x50, 0x20])
+    KontrolF1.linkPlay('decks', 'play_' + (3 - mod * 2), '[Channel' + channel + ']', 'beats_translate_earlier', undefined, KontrolF1.translateBeats, undefined, [32, 100])
+    KontrolF1.linkPlay('decks', 'play_' + (4 - mod * 2), '[Channel' + channel + ']', 'beats_translate_later', undefined, KontrolF1.translateBeats, undefined, [100, 32])
 
     for (var i = 1; i < 5; i++) {
         KontrolF1.linkKnob('samplers', 'knob_' + i, '[Sampler' + i + ']', 'rate')
         KontrolF1.linkFader('samplers', 'fader_' + i, '[Sampler' + i + ']', 'pregain')
         for (var row = 0; row < 4; row++) {
-            KontrolF1.linkGrid('samplers', 'grid_' + (i + row * 4), '[Sampler' + i + ']', 'hotcue_' + row, false, KontrolF1.hotcue, [0, 0x66, 0x66])
+            KontrolF1.linkGrid('samplers', 'grid_' + (i + row * 4), '[Sampler' + i + ']', 'hotcue_' + row, false, KontrolF1.hotcue, [0, 100, 100])
         }
         KontrolF1.linkPlay('samplers', 'play_' + i, '[Sampler' + i + ']', 'play', true)
     }
