@@ -448,10 +448,9 @@ KontrolF1.connectModeLEDs = function (mode) {
 }
 
 KontrolF1.setLED = function (value, group, key) {
-    var grid = KontrolF1.grids[KontrolF1.controlMode]
-    var buttons = KontrolF1.playbuttons[KontrolF1.controlMode]
-    var matched = false
+    var hasUpdates = false
 
+    var grid = KontrolF1.grids[KontrolF1.controlMode]
     for (var name in grid) {
         var button = grid[name]
         var button_index = parseInt(name.split('_')[1])
@@ -462,9 +461,10 @@ KontrolF1.setLED = function (value, group, key) {
         else
             value = 0, 0, 0
         KontrolF1.setPADColor(button_index, value[0], value[1], value[2])
-        matched = true
-        break
+        hasUpdates = true
     }
+
+    var buttons = KontrolF1.playbuttons[KontrolF1.controlMode]
     for (var name in buttons) {
         var button = buttons[name]
         var button_index = parseInt(name.split('_')[1])
@@ -472,10 +472,10 @@ KontrolF1.setLED = function (value, group, key) {
             continue
         KontrolF1.setButtonBrightness('play_' + button_index + '_1', value * button.ledbrightness[0])
         KontrolF1.setButtonBrightness('play_' + button_index + '_2', value * button.ledbrightness[1])
-        matched = true
-        break
+        hasUpdates = true
     }
-    if (matched)
+
+    if (hasUpdates)
         KontrolF1.controller.sendLightsUpdate()
 }
 
