@@ -188,7 +188,7 @@ function KontrolF1Controller() {
     this.set7SegmentNumber = function (number) {
         var controller = this.controller
         var packet = controller.getLightsPacket()
-        if (number != undefined) {
+        if (number !== undefined) {
             left = KontrolF1.segments[Math.floor(number / 10)]
             right = KontrolF1.segments[number % 10]
         } else {
@@ -277,7 +277,7 @@ KontrolF1.init = function (id) {
     KontrolF1.setControlMode(KontrolF1.defaultControlMode)
 
     // Timers can't be defined in prototype with this.
-    if (KontrolF1.LEDUpdateInterval != undefined) {
+    if (KontrolF1.LEDUpdateInterval !== undefined) {
         KontrolF1.LEDTimer = engine.beginTimer(
             KontrolF1.LEDUpdateInterval,
             'KontrolF1.controller.sendLightsUpdate()'
@@ -362,14 +362,14 @@ KontrolF1.ButtonLEDPressUpdate = function (packet, changed_data) {
         var delta = changed_data[field]
         var name = field.split('.')[1]
         // Select encoder also resets LEDs for some reason
-        if (field == 'select_encoder') {
+        if (field === 'select_encoder') {
             send_led_update = true
             break
         }
         // Check if this is one of permanently lit LEDs
         var controlmode = false
         for (mode in KontrolF1.controlModeButtons) {
-            if (KontrolF1.controlModeButtons[mode] == name) {
+            if (KontrolF1.controlModeButtons[mode] === name) {
                 controlmode = true
                 break
             }
@@ -380,7 +380,7 @@ KontrolF1.ButtonLEDPressUpdate = function (packet, changed_data) {
         }
 
         // Update leds if any of these buttons were modified in packet
-        if (KontrolF1.buttonNames.indexOf(name) != -1) {
+        if (KontrolF1.buttonNames.indexOf(name) !== -1) {
             KontrolF1.setButtonBrightness(name, delta.value * 0x7f)
             send_led_update = true
             break
@@ -455,7 +455,7 @@ KontrolF1.setLED = function (value, group, key) {
     for (var name in grid) {
         var button = grid[name]
         var button_index = parseInt(name.split('_')[1])
-        if (button.group != group || button.ledname != key)
+        if (button.group !== group || button.ledname !== key)
             continue
         if (value)
             value = button.ledcolor
@@ -468,7 +468,7 @@ KontrolF1.setLED = function (value, group, key) {
     for (var name in buttons) {
         var button = buttons[name]
         var button_index = parseInt(name.split('_')[1])
-        if (button.group != group || button.ledname != key)
+        if (button.group !== group || button.ledname !== key)
             continue
         KontrolF1.setButtonBrightness('play_' + button_index + '_1', value * button.ledbrightness[0])
         KontrolF1.setButtonBrightness('play_' + button_index + '_2', value * button.ledbrightness[1])
@@ -809,7 +809,7 @@ KontrolF1.translateBeats = function (button, field) {
 KontrolF1.hotcue = function (button, field) {
     var controller = KontrolF1.controller
     var name = button.name + '_'
-    if (field.value == controller.buttonStates.released)
+    if (field.value === controller.buttonStates.released)
         return
     if (controller.modifiers.get('shift'))
         name = name + 'clear'
