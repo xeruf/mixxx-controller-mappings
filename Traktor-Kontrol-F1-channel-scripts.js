@@ -760,10 +760,10 @@ KontrolF1.registerCallbacks = function () {
     }
     // Map 4th row for loop controls: activate beatloop, toggle, halve, double
     const loop_offset = 12
-    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 1), '[Channel' + channel + ']', 'beatloop_activate', false, undefined, [0, 0x7f, 0])
-    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 2), '[Channel' + channel + ']', 'reloop_toggle', false, undefined, [0x7f, 0, 0])
-    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 3), '[Channel' + channel + ']', 'loop_halve', false, undefined, [0, 0x7f, 0])
-    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 4), '[Channel' + channel + ']', 'loop_double', false, undefined, [0, 0x7f, 0])
+    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 1), '[Channel' + channel + ']', 'beatloop_activate', false, KontrolF1.loopIn, [16, 127, 16], 'loop_enabled')
+    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 2), '[Channel' + channel + ']', 'reloop_toggle', false, KontrolF1.loopOut, [127, 32, 32], 'loop_enabled')
+    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 3), '[Channel' + channel + ']', 'loop_halve', false, undefined, [0, 64, 0], 'loop_enabled')
+    KontrolF1.linkGrid('decks', 'grid_' + (loop_offset + 4), '[Channel' + channel + ']', 'loop_double', false, undefined, [0, 64, 0], 'loop_enabled')
 
     // Using 2 controllers side-by-side, the controller for Channel1 is on the left, so these controls are mirrored for convenience
     const mod = channel % 2
@@ -823,5 +823,23 @@ KontrolF1.hotcue = function (button, field) {
             name = name + 'set'
     else
         name = name + 'activate'
+    engine.setParameter(button.group, name, field.value)
+}
+
+KontrolF1.loopIn = function (button, field) {
+    var controller = KontrolF1.controller
+    if (controller.modifiers.get('shift'))
+        name = 'loop_in'
+    else
+        name = button.name
+    engine.setParameter(button.group, name, field.value)
+}
+
+KontrolF1.loopOut = function (button, field) {
+    var controller = KontrolF1.controller
+    if (controller.modifiers.get('shift'))
+        name = 'loop_out'
+    else
+        name = button.name
     engine.setParameter(button.group, name, field.value)
 }
