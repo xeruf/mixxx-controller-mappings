@@ -684,9 +684,16 @@ KontrolF1.scroll = function (field) {
 }
 
 KontrolF1.scrollButton = function (button) {
-    if (button.value === KontrolF1.controller.buttonStates.released)
-        return
-    engine.setParameter('[Channel' + channel + ']', 'LoadSelectedTrack', 1)
+    var controller = KontrolF1.controller
+    if (controller.modifiers.get('browse')) {
+        if (button.value === controller.buttonStates.released)
+            return
+        const newVal = Math.round(engine.getValue('[Channel' + channel + ']', 'beatjump_size') + 1)
+        engine.setParameter('[Channel' + channel + ']', 'beatjump_size', newVal)
+        engine.setParameter('[Channel' + channel + ']', 'beatloop_size', newVal)
+    } else {
+        engine.setParameter('[Channel' + channel + ']', 'LoadSelectedTrack', button.value)
+    }
 }
 
 KontrolF1.registerCallbacks = function () {
