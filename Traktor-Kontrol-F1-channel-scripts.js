@@ -627,7 +627,7 @@ KontrolF1.button = function (button, field) {
         else
             controller.toggle(button.group, button.name, field.value)
     } else {
-        engine.setParameter(button.group, button.name, field.value === KontrolF1.controller.buttonStates.pressed)
+        engine.setParameter(button.group, button.name, field.value)
     }
 }
 
@@ -705,7 +705,7 @@ KontrolF1.registerCallbacks = function () {
             }
         } else {
             KontrolF1.syncTime = Date.now()
-            engine.setParameter('[Channel' + channel + ']', 'beatsync', 1)
+            engine.setParameter('[Channel' + channel + ']', 'beatsync', button.value)
         }
     })
 
@@ -776,7 +776,7 @@ KontrolF1.registerCallbacks = function () {
                 name += 'default'
             }
         }
-        engine.setParameter(button.group, name, field.value === KontrolF1.controller.buttonStates.pressed)
+        engine.setParameter(button.group, name, field.value)
     }, 'cue_default')
     KontrolF1.linkPlay('decks', 'play_' + (3 - mod * 2), '[Channel' + channel + ']', 'beats_translate_earlier', undefined, KontrolF1.translateBeats, undefined, [32, 100])
     KontrolF1.linkPlay('decks', 'play_' + (4 - mod * 2), '[Channel' + channel + ']', 'beats_translate_later', undefined, KontrolF1.translateBeats, undefined, [100, 32])
@@ -796,7 +796,7 @@ KontrolF1.translateBeats = function (button, field) {
         if (KontrolF1.translateBeatsTimer)
             engine.stopTimer(KontrolF1.translateBeatsTimer)
     } else {
-        engine.setParameter(button.group, button.name, 1)
+        engine.setParameter(button.group, button.name, field.value)
         KontrolF1.translateBeatsTimer = engine.beginTimer(
             50,
             'engine.setParameter("' + button.group + '", "' + button.name + '", 1)'
@@ -807,8 +807,6 @@ KontrolF1.translateBeats = function (button, field) {
 KontrolF1.hotcue = function (button, field) {
     var controller = KontrolF1.controller
     var name = button.name + '_'
-    if (field.value === controller.buttonStates.released)
-        return
     if (controller.modifiers.get('shift'))
         name = name + 'clear'
     else if (controller.modifiers.get('browse'))
@@ -818,5 +816,5 @@ KontrolF1.hotcue = function (button, field) {
             name = name + 'set'
     else
         name = name + 'activate'
-    engine.setParameter(button.group, name, true)
+    engine.setParameter(button.group, name, field.value)
 }
