@@ -751,12 +751,13 @@ KontrolF1.registerCallbacks = function () {
     KontrolF1.linkFader('decks', 'fader_4', '[Channel2]', 'rate')
 
     for (i = 1; i <= 16; i++) {
+        // TODO bind to hotcue_X_color
         KontrolF1.linkGrid('decks', 'grid_' + i, '[Channel' + channel + ']', 'hotcue_' + i, false, KontrolF1.hotcue, [0, 64, 127])
     }
     // Map 3rd row for macro controls
     const macro_offset = 8
     for (i = 1; i <= 4; i++) {
-        KontrolF1.linkGrid('decks', 'grid_' + (macro_offset + i), '[Channel' + channel + ']', 'macro_' + i + '_activate', false, undefined, [0x7f, 0x44, 0], 'macro_' + i + '_status')
+        KontrolF1.linkGrid('decks', 'grid_' + (macro_offset + i), '[Channel' + channel + ']', 'macro_' + i, false, KontrolF1.macro, [127, 64, 0], 'macro_' + i + '_status')
     }
     // Map 4th row for loop controls: activate beatloop, toggle, halve, double
     const loop_offset = 12
@@ -841,5 +842,17 @@ KontrolF1.loopOut = function (button, field) {
         name = 'loop_out'
     else
         name = button.name
+    engine.setParameter(button.group, name, field.value)
+}
+
+KontrolF1.macro = function (button, field) {
+    var controller = KontrolF1.controller
+    var name = button.name + '_'
+    if (controller.modifiers.get('shift'))
+        name = name + 'clear'
+    else if (controller.modifiers.get('browse'))
+        name = name + 'toggle'
+    else
+        name = name + 'activate'
     engine.setParameter(button.group, name, field.value)
 }
