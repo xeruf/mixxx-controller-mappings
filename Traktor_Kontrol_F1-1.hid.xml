@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<MixxxControllerPreset mixxxVersion="2.0+" schemaVersion="1">
+<MixxxControllerPreset mixxxVersion="2.4+" schemaVersion="1">
     <info>
         <name>Native Instruments Traktor Kontrol F1 Deck 1</name>
         <author>Janek Fischer</author>
@@ -8,7 +8,7 @@
     <controller id="KontrolF1">
         <scriptfiles>
             <file filename="common-hid-packet-parser.js" functionprefix=""/>
-            <file filename="common-hid-utils.js" functionprefix=""/>
+            <file filename="common-hid-utils-new.js" functionprefix=""/>
             <file filename="KontrolF1-1.js" functionprefix=""/>
             <file filename="Traktor-Kontrol-F1-channel-scripts.js" functionprefix="KontrolF1"/>
         </scriptfiles>

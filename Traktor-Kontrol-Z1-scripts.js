@@ -118,7 +118,7 @@ function KontrolZ1Controller() {
             packet.getField('hid', 'ch' + channel + '_meter_segment' + (i + 1)).value = br
         }
         this.controller.sendLightsUpdate()
-    }
+    }.bind(this)
 
     // endregion
 
