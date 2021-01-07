@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MixxxControllerPreset mixxxVersion="2.0+" schemaVersion="1">
+    <info>
+        <name>Native Instruments Traktor Kontrol F1 Deck 2</name>
+        <author>Janek Fischer</author>
+        <description>HID mapping for Native Instruments Traktor Kontrol F1 Controller for Deck 2</description>
+    </info>
+    <controller id="KontrolF1">
+        <scriptfiles>
+            <file filename="common-hid-packet-parser.js" functionprefix=""/>
+            <file filename="common-hid-utils.js" functionprefix=""/>
+            <file filename="KontrolF1-2.js" functionprefix=""/>
+            <file filename="Traktor-Kontrol-F1-channel-scripts.js" functionprefix="KontrolF1"/>
+        </scriptfiles>
+    </controller>
+</MixxxControllerPreset>
